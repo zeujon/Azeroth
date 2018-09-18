@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop" 
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd" >
+
+	<!-- 阿里 druid 数据库连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<!-- 数据库基本信息配置 -->
+		<property name="url" value="${master.jdbc.url}" />
+		<property name="username" value="${master.jdbc.username}" />
+		<property name="password" value="${master.jdbc.password}" />
+		<property name="driverClassName" value="${master.jdbc.driverClassName}" />
+		<property name="filters" value="${master.jdbc.filters}" />
+		<!-- 最大并发连接数 -->
+		<property name="maxActive" value="${master.jdbc.maxActive}" />
+		<!-- 初始化连接数量 -->
+		<property name="initialSize" value="${master.jdbc.initialSize}" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="${master.jdbc.maxWait}" />
+		<!-- 最小空闲连接数 -->
+		<property name="minIdle" value="${master.jdbc.minIdle}" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="${master.jdbc.timeBetweenEvictionRunsMillis}" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="${master.jdbc.minEvictableIdleTimeMillis}" />
+		<property name="validationQuery" value="${master.jdbc.validationQuery}" />
+		<property name="testWhileIdle" value="${master.jdbc.testWhileIdle}" />
+		<property name="testOnBorrow" value="${master.jdbc.testOnBorrow}" />
+		<property name="testOnReturn" value="${master.jdbc.testOnReturn}" />
+		<property name="maxOpenPreparedStatements" value="${master.jdbc.maxOpenPreparedStatements}" />
+		<!-- 打开 removeAbandoned 功能 -->
+		<property name="removeAbandoned" value="${master.jdbc.removeAbandoned}" />
+		<!-- 1800 秒，也就是 30 分钟 -->
+		<property name="removeAbandonedTimeout" value="${master.jdbc.removeAbandonedTimeout}" />
+		<!-- 关闭 abanded 连接时输出错误日志 -->
+		<property name="logAbandoned" value="${master.jdbc.logAbandoned}" />
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+		<property name="poolPreparedStatements" value="${master.jdbc.poolPreparedStatements}" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="${master.jdbc.maxPoolPreparedStatementPerConnectionSize}" />
+		
+		<!-- 监控统计拦截的filters,日志记录 start -->
+		<!-- 在filters属性中需配置log4j -->
+		<property name="proxyFilters">
+			<list>
+				<ref bean="druid-stat-filter" />
+				<ref bean="druid-log-filter"/>
+			</list>
+		</property>
+		<!-- 监控统计拦截的filters,日志记录  end -->
+	</bean>
+	
+	<!-- 慢SQL记录  start-->
+	<bean id="druid-stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+		<property name="slowSqlMillis" value="3000" />
+		<property name="mergeSql" value="true" />
+		<property name="logSlowSql" value="true" />
+	</bean>
+
+	<bean id="druid-log-filter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+		<!-- <property name="resultSetLogEnabled" value="false" /> -->
+		<!-- <property name="statementExecutableSqlLogEnable" value="true" /> -->
+	</bean>
+	<!-- 慢SQL记录  end-->
+
+	<bean id="zpDataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
+		<property name="driver">
+			<value>com.mysql.jdbc.Driver</value>
+		</property>
+		<property name="driverUrl">
+			<value>jdbc:mysql://192.168.39.30:3306/recruit?user=U4acEAKi66z2Q&amp;password=NRc6pz22YW6n730MuB8J</value>
+		</property>
+		<property name="user" value="U4acEAKi66z2Q" />
+		<property name="password" value="NRc6pz22YW6n730MuB8J" />
+		<property name="houseKeepingSleepTime" value="90000" />
+		<property name="prototypeCount" value="0" />
+		<property name="maximumConnectionCount" value="80" />
+		<property name="minimumConnectionCount" value="2" />
+		<property name="simultaneousBuildThrottle" value="50" />
+		<property name="houseKeepingTestSql" value="select CURRENT_DATE" />
+		<property name="testBeforeUse" value="true" />
+		<property name="testAfterUse" value="true" />
+	</bean>
+	
+	<bean id="gnnDataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
+		<property name="driver">
+			<value>com.mysql.jdbc.Driver</value>
+		</property>
+		<property name="driverUrl">
+			<value>jdbc:mysql://192.168.150.19:3306/talkbbs?user=zhys&amp;password=QNYLGTNXtFCJGvvz</value>
+		</property>
+		<property name="user" value="zhys" />
+		<property name="password" value="QNYLGTNXtFCJGvvz" />
+		<property name="houseKeepingSleepTime" value="90000" />
+		<property name="prototypeCount" value="0" />
+		<property name="maximumConnectionCount" value="80" />
+		<property name="minimumConnectionCount" value="2" />
+		<property name="simultaneousBuildThrottle" value="50" />
+		<property name="houseKeepingTestSql" value="select '1'" />
+		<property name="testBeforeUse" value="true" />
+		<property name="testAfterUse" value="true" />
+	</bean>
+</beans>

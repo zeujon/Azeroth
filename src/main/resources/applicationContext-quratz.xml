@@ -1,0 +1,967 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd"
+                        default-lazy-init="false">
+                        
+	<bean name="quartzScheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<!--
+				<ref bean="noderemindTrigger" />
+				<ref bean="workflowTrigger" />
+				<ref bean="noderemindTrigger" />
+				<ref bean="score" />
+				<ref bean="docLockInfoTrigger" />
+				<ref bean="saveOnlineUserCounter"/>
+				<ref bean="redb" />
+				<ref bean="messageSendManager" />
+				<ref bean="updatemailbyad"/>
+				<ref bean="stationcheck" />
+				<ref bean="systablecheckday" />
+				<ref bean="systablecheckweek" />
+				<ref bean="systablecheckmonth" />
+				<ref bean="systablecheckmonthlast" />
+				<ref bean="salesconnect" />
+				<ref bean="delpermission" />
+				<ref bean="checkaging" />
+				<ref bean="getCurrentKaoqinFromKQDB" />
+				<ref bean="checkAgreement" />
+				<ref bean="createAssetsCostData" />
+				<ref bean="getgnnscore" />
+				<ref bean="checkbirthdate" />
+				<ref bean="checkentryoneyear" />
+				<ref bean="contractRemindMailPerMonthDay1" />
+				<ref bean="contractRemindMailPerMonthDay16" />
+				<ref bean="attendanceDataSyncToAMT" />
+				<ref bean="chkUserFromAMT" />
+				<ref bean="synchroUserToMUST" />
+				<ref bean="synchroMUSTAttendanceData" />
+				<ref bean="synchroMUSTTerminalAttendanceData" />
+				<ref bean="createWorkflowAnalysisReport" />
+				<ref bean="createHumanWeekReport" />
+				<ref bean="requestschedule12" />
+				<ref bean="requestschedule09" />
+				<ref bean="skRemind" />
+				 定时触发  -->
+				 
+				<ref bean="updateBudgetcontrol" />
+				<ref bean="finishedWf" />
+				<ref bean="initMishuMap" />
+				<!-- 关闭邮件审批功能
+				<ref bean="schedule10AM" />
+				<ref bean="getnewmail" />
+				<ref bean="checknewworkflow" />
+				关闭itil同步
+				<ref bean="itilconnect" />
+				<ref bean="attendanceDataAndSendMail" />
+				<ref bean="assetscheck" />
+				 -->
+				 
+				 <!-- 报表的定时任务  -->
+				<ref bean="bidSchedule" />
+			</list>
+		</property>
+		<property name="configLocation" value="classpath:quartz.properties" />
+		<property name="autoStartup" value="true" />
+		<property name="schedulerName" value="portalScheduler" />
+	</bean>
+	
+	<bean id="stationcheck" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="sysstationCheck" />
+				</property>
+				<property name="targetMethod">
+					<value>quratzStationCheck</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 3 ? * SAT</value><!-- 周六3点 -->
+		</property>
+	</bean>
+	
+	<bean id="requestschedule09" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="assetsService" />
+				</property>
+				<property name="targetMethod">
+					<value>doRequestSchedule</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 9 * * ?</value><!-- 每天9点 -->
+		</property>
+	</bean>
+	
+	<bean id="requestschedule12" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="assetsService" />
+				</property>
+				<property name="targetMethod">
+					<value>doRequestSchedule</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 45 12 * * ?</value><!-- 每天12点45分 -->
+		</property>
+	</bean>
+
+	<bean id="systablecheckday" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="systableCheck" />
+				</property>
+				<property name="targetMethod">
+					<value>quratzCheckDay</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 0 * * ?</value><!-- 每天0点 -->
+		</property>
+	</bean>
+	
+	<bean id="systablecheckweek" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="systableCheck" />
+				</property>
+				<property name="targetMethod">
+					<value>quratzCheckWeek</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 0 ? * MON</value><!-- 周一0点 -->
+		</property>
+	</bean>
+	
+	<bean id="systablecheckmonth" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="systableCheck" />
+				</property>
+				<property name="targetMethod">
+					<value>quratzCheckMonth</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 0 1 * ?</value><!-- 每月1日0点 -->
+		</property>
+	</bean>
+	
+	<bean id="systablecheckmonthlast" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="systableCheck" />
+				</property>
+				<property name="targetMethod">
+					<value>quratzCheckMonth</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 30 23 L * ?</value><!-- 每月底23点30 -->
+		</property>
+	</bean>
+	
+	<bean id="getnewmail" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="checkmail" />
+				</property>
+				<property name="targetMethod">
+					<value>checkNewmail</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="repeatInterval">
+			<value>60000</value><!-- 1分钟 -->
+		</property>
+	</bean>
+
+	<bean id="salesconnect" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="salesConnect" />
+				</property>
+				<property name="targetMethod">
+					<value>CheckSales</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 2 * * ?</value><!-- 每天2点 -->
+		</property>
+	</bean>
+
+	<bean id="itilconnect" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="itilConnect" />
+				</property>
+				<property name="targetMethod">
+					<value>getSConnection</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 4 * * ?</value><!-- 每天4点 -->
+		</property>
+	</bean>
+
+	<bean id="docLockInfoTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="docLockInfoJob" />
+				</property>
+				<property name="targetMethod">
+					<value>releaseDocLock</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 1 * * ?</value><!-- 每天1点 -->
+		</property>
+	</bean>
+
+	<bean id="workflowTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="workflowCreateJob" />
+				</property>
+				<property name="targetMethod">
+					<value>check</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="repeatInterval">
+			<value>300000</value><!-- 5分钟 -->
+		</property>
+	</bean>
+
+	<bean id="noderemindTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="nodeRemindJob" />
+				</property>
+				<property name="targetMethod">
+					<value>check</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="repeatInterval">
+			<value>600000</value><!-- 10分钟 -->
+		</property>
+	</bean>
+
+	<bean id="score" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="scoreSumService" />
+				</property>
+				<property name="targetMethod">
+					<value>score</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 5/3 * * ?</value><!--  -->
+		</property>
+	</bean>
+
+	<bean id="redb" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="statusDbTrig" />
+				</property>
+				<property name="targetMethod">
+					<value>reboot</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 0/24 * * ?</value><!-- 每天0点 -->
+		</property>
+	</bean>
+	<bean id="messageSendManager" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="messageSendJob" />
+				</property>
+				<property name="targetMethod">
+					<value>sendMessage</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="repeatInterval">
+			<value>1800000</value><!-- 30分钟 -->
+		</property>
+	</bean>
+
+	<bean id="checknewworkflow" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="checkmail" />
+				</property>
+				<property name="targetMethod">
+					<value>checkWorkflow</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="repeatInterval">
+			<value>600000</value><!-- 10分钟 -->
+		</property>
+	</bean>
+	
+	<bean id="saveOnlineUserCounter"
+		class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="humresService" />
+				</property>
+				<property name="targetMethod">
+					<value>saveOnlineUserCounter</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property> 
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0/60 * * * ?</value><!-- 每分钟一次 -->
+		</property>
+	</bean>
+	
+	<bean id="updatemailbyad" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="ztgamead" />
+				</property>
+				<property name="targetMethod">
+					<value>updateMailbyAd</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 4 ? * SUN</value><!-- 周日4点 -->
+		</property>
+	</bean>
+	
+	<bean id="assetscheck" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="assetschange" />
+				</property>
+				<property name="targetMethod">
+					<value>check</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 0 1 * ?</value><!-- 每月1日 -->
+		</property>
+	</bean>
+	
+	<bean id="delpermission" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="delPermission" />
+				</property>
+				<property name="targetMethod">
+					<value>check</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 3 * * ?</value><!-- 每日3点 -->
+		</property>
+	</bean>
+	
+	<bean id="checkbirthdate" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="humresService" />
+				</property>
+				<property name="targetMethod">
+					<value>sendBirthdayMailByToday</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 8 * * ?</value><!-- 每日8点 -->
+		</property>
+	</bean>
+	
+	<bean id="checkentryoneyear" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="humresService" />
+				</property>
+				<property name="targetMethod">
+					<value>sendMailToEntryOneYear</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 9 * * ?</value><!-- 每日9点 -->
+		</property>
+	</bean>
+	
+	<bean id="checkaging" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="transactionService" />
+				</property>
+				<property name="targetMethod">
+					<value>checkAging</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 0 1 * ?</value><!-- 每月1日 -->
+		</property>
+	</bean>
+	
+	<bean id="finishedWf" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="wfUtilService" />
+				</property>
+				<property name="targetMethod">
+					<value>finishedWf</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 3 * * ?</value><!-- 每日3点 -->
+		</property>
+	</bean>
+	
+	<bean id="initMishuMap" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="assistantService" />
+				</property>
+				<property name="targetMethod">
+					<value>initMishuMap</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 1 * * ?</value><!-- 每日3点 -->
+		</property>
+	</bean>
+	
+	<bean id="checkAgreement" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="legalService" />
+				</property>
+				<property name="targetMethod">
+					<value>checkAgreement</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 8 * * ?</value><!-- 每日8点 -->
+		</property>
+	</bean>
+	
+	<bean id="createAssetsCostData" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="assetsCost" />
+				</property>
+				<property name="targetMethod">
+					<value>createAssetsCostData</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 0 1 * ?</value><!-- 每月1日 -->
+		</property>
+	</bean>
+	
+	<bean id="updateBudgetcontrol" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="ztgameBudgetService" />
+				</property>
+				<property name="targetMethod">
+					<value>updateBudgetcontrol</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 4 * * ?</value><!-- 每日4点 -->
+		</property>
+	</bean>
+	
+	<bean id="getCurrentKaoqinFromKQDB" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="humresService" />
+				</property>
+				<property name="targetMethod">
+					<value>getCurrentKaoqinFromKQDB</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 8 * * ?</value><!-- 每日8点 -->
+		</property>
+	</bean>
+	
+	<bean id="getgnnscore" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="gnnScoreService" />
+				</property>
+				<property name="targetMethod">
+					<value>syncGnnGcoin</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 9 ? * MON</value><!-- 周一9点 -->
+		</property>
+	</bean>
+	
+	<!-- 合同到期提醒 -->
+	<bean id="contractRemindMailPerMonthDay1" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="legalService" />
+				</property>
+				<property name="targetMethod">
+					<value>sendContractRemindMailPerMonthDay1</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 10 1 * ?</value><!-- 每月1日10点 -->
+		</property>
+	</bean>
+	
+	<!-- 合同到期前一个月提醒 -->
+	<bean id="contractRemindMailPerMonthDay16" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="legalService" />
+				</property>
+				<property name="targetMethod">
+					<value>sendContractRemindMailPerMonthDay16</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 10 16 * ?</value><!-- 每月16日10点 -->
+		</property>
+	</bean>
+	
+	<!-- 每天检查考勤数据插入异常并邮件通知 -->
+	<bean id="attendanceDataAndSendMail" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="ztgameUtilService" />
+				</property>
+				<property name="targetMethod">
+					<value>checkAttendanceDataAndSendMail</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 7 * * ?</value><!-- 每天7点 -->
+		</property>
+	</bean>
+	
+	<!-- 每天检查MUST考勤数据是否同步到AMT -->
+	<bean id="attendanceDataSyncToAMT" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="ztgameUtilService" />
+				</property>
+				<property name="targetMethod">
+					<value>checkAttendanceDataSyncToAMT</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 30 8 * * ?</value><!-- 每天8点30分 -->
+		</property>
+	</bean>
+	
+	<!-- 每天检查AMT用户是否在MUST中存在 -->
+	<bean id="chkUserFromAMT" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="ztgameUtilService" />
+				</property>
+				<property name="targetMethod">
+					<value>checkUserFromAMT</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 30 1 * * ?</value><!-- 每天1点30分 -->
+		</property>
+	</bean>
+	
+	<!-- 每天同步用户到MUST -->
+	<bean id="synchroUserToMUST" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="ztgameUtilService" />
+				</property>
+				<property name="targetMethod">
+					<value>syncUserToMUST</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 1 * * ?</value><!-- 每天1点 -->
+		</property>
+	</bean>
+	
+	<!-- 每天同步MUST考勤数据 -->
+	<bean id="synchroMUSTAttendanceData" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="ztgameUtilService" />
+				</property>
+				<property name="targetMethod">
+					<value>syncMUSTAttendanceData</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 6 * * ?</value><!-- 每天6点 -->
+		</property>
+	</bean>
+	
+	<!-- 每天计算MUST终端考勤数据 -->
+	<bean id="synchroMUSTTerminalAttendanceData" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="ztgameUtilService" />
+				</property>
+				<property name="targetMethod">
+					<value>syncMUSTTerminalAttendanceData</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 30 6 * * ?</value><!-- 每天6点30 -->
+		</property>
+	</bean>
+	
+	<!-- 每天计算生成流程使用情况分析表 -->
+	<bean id="createWorkflowAnalysisReport" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="ztgameUtilService" />
+				</property>
+				<property name="targetMethod">
+					<value>createWorkflowAnalysisReport</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 15 7 * * ?</value><!-- 每天7点15分 -->
+		</property>
+	</bean>
+	
+	<!-- 每周日计算人员周报 -->
+	<bean id="createHumanWeekReport" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="ztgameUtilService" />
+				</property>
+				<property name="targetMethod">
+					<value>createHumanWeekReport</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 45 23 ? * SUN</value><!-- 周日23点45分 -->
+		</property>
+	</bean>
+	
+	<!-- 每天定时发送收款提单提醒邮件 -->
+	<bean id="skRemind" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="quratzService" />
+				</property>
+				<property name="targetMethod">
+					<value>shoukuanRemind</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 5 17 * * ?</value><!-- 每天17点05分 -->
+		</property>
+	</bean>
+	
+	<!-- 每天10点定时器 -->
+	<bean id="schedule10AM" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="quratzService" />
+				</property>
+				<property name="targetMethod">
+					<value>schedule10AM</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 10 * * ?</value><!-- 每天10点 -->
+		</property>
+	</bean>
+	
+	
+	<!-- 报表的定时任务,每年一次统计  -->
+	<bean id="bidSchedule" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="quratzService" />
+				</property>
+				<property name="targetMethod">
+					<value>summaryQuartzTask</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<!-- <value>0 45 15 * * ?</value> -->
+			<value>0 0 0 31 12 ?</value> <!-- 每年12月31日零点执行 -->
+		</property>
+	</bean>	
+	
+	
+</beans>

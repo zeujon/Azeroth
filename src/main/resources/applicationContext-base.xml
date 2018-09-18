@@ -1,0 +1,1002 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd">
+		
+	<bean id="passwordHistoryService" class="com.velcro.base.passwordhistory.service.PasswordHistoryService">
+		<property name="passwordHistoryDao">
+			<ref bean="passwordHistoryDao" />
+		</property>
+	</bean>
+	
+	<bean id="passwordHistoryDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.passwordhistory.dao.PasswordHistoryDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory"/>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="imMessage" class="com.velcro.base.msg.im.IMMessageRTXHttp">
+		<property name="humresService">
+			<ref bean="humresService" />
+		</property>
+		<property name="httpServerIP" value="127.0.0.1"></property>
+		<property name="httpServerPort" value="8012"></property>
+	</bean>
+	
+	<bean id="emailMessage" class="com.velcro.base.msg.email.EmailMessagePop">
+		<property name="humresService">
+			<ref bean="humresService" />
+		</property>
+	</bean>
+	<bean id="smsMessage" class="com.velcro.base.msg.sms.SMSMessageEMay">
+		<property name="humresService">
+			<ref bean="humresService" />
+		</property>
+		<constructor-arg index="0">   
+            <value>892875</value>   
+        </constructor-arg>   
+        <constructor-arg index="1">   
+        	<!-- value>3SDK-SYJ-0130-KDRUK</value-->
+            <value>3SDK-SYJ-0130-KDRUK</value>   
+        </constructor-arg>   
+		 <constructor-arg index="2">   
+            <value>892875</value>   
+        </constructor-arg>   
+	</bean>
+	
+	<bean id="eventMessage" class="com.velcro.base.msg.event.EventMessageVelcro">
+		<property name="eventService">
+			<ref bean="eventService" />
+		</property>
+		<property name="setitemService">
+			<ref bean="setitemService" />
+		</property>
+		<property name="sysuserService">
+			<ref bean="sysuserService" />
+		</property>
+	</bean>
+
+	<bean id="mimeMail" class="com.velcro.base.msg.email.EmailMimeMessage">
+		<property name="mailbaseService">
+			<ref bean="mailbaseService" />
+		</property>
+		<property name="mailtextService">
+			<ref bean="mailtextService" />
+		</property>
+		<property name="attachService">
+			<ref bean="attachService" />
+		</property>
+		<property name="setitemService">
+			<ref bean="setitemService" />
+		</property>
+		<property name="mailreceiverService">
+			<ref bean="mailreceiverService" />
+		</property>
+		<property name="blacklistService">
+			<ref bean="blacklistService" />
+		</property>
+		<property name="mailFilterService">
+			<ref bean="mailFilterService" />
+		</property>
+		<property name="mailboxService">
+			<ref bean="mailboxService" />
+		</property>
+		<property name="dataService">
+			<ref bean="dataService" />
+		</property>
+	</bean>
+	
+	<bean id="attachService" class="com.velcro.document.base.service.AttachService">
+        <property name="attachDao">
+            <ref bean="attachDao" />
+        </property>
+    </bean>
+	
+	<bean id="dataService" class="com.velcro.base.DataService">
+		<property name="baseJdbcDao">
+			<ref bean="baseJdbcDao" />
+		</property>
+	</bean>
+
+	<bean id="searchcustomizeService" class="com.velcro.base.searchcustomize.service.SearchcustomizeService">
+		<property name="searchcustomizeDao">
+			<ref bean="searchcustomizeDao" />
+		</property>
+	</bean>	
+	
+	<bean id="searchcustomizeoptionService" class="com.velcro.base.searchcustomize.service.SearchcustomizeoptionService">
+		<property name="searchcustomizeoptionDao">
+			<ref bean="searchcustomizeoptionDao" />
+		</property>
+	</bean>
+	
+	<bean id="extfieldService" class="com.velcro.base.extfield.service.ExtfieldService">
+		<property name="extfieldsetDao">
+			<ref bean="extfieldsetDao" />
+		</property>
+		<property name="extfieldinfoDao">
+			<ref bean="extfieldinfoDao" />
+		</property>
+	</bean>
+	<bean id="csvFileHelper" class="com.velcro.base.util.CSVFileHelper">
+		<property name="setitemService">
+			<ref bean="setitemService" />
+		</property>
+		<property name="attachService">
+			<ref bean="attachService" />
+		</property>
+		<property name="dataService">
+			<ref bean="dataService" />
+		</property>
+	</bean>
+	
+	<bean id="extfieldsetDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.extfield.dao.ExtfieldsetDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory"/>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="extfieldinfoDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.extfield.dao.ExtfieldinfoDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory"/>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	
+	<bean id="menuService" class="com.velcro.base.menu.service.MenuService">
+		<property name="menuDao">
+			<ref bean="menuDao" />
+		</property>
+		<property name="labelService">
+			<ref bean="labelService" />
+		</property>
+	</bean>
+
+	<bean id="checkPermission" class="com.velcro.base.security.util.CheckPermission">
+		<property name="dataService">
+			<ref bean="dataService" />
+		</property>
+	</bean>
+
+	<bean id="checkPermissionChange" class="com.velcro.base.security.util.CheckPermissionChange">
+		<property name="dataService">
+			<ref bean="dataService" />
+		</property>
+		<property name="setitemService">
+			<ref bean="setitemService" />
+		</property>
+	</bean>
+
+	<bean id="labelService" class="com.velcro.base.label.service.LabelService">
+		<property name="labelDao">
+			<ref bean="labelDao" />
+		</property>
+	</bean>
+
+	<bean id="pagemenuService" class="com.velcro.base.menu.service.PagemenuService">
+		<property name="labelService">
+			<ref bean="labelService" />
+		</property>
+		<property name="pagemenuDao">
+			<ref bean="pagemenuDao" />
+		</property>
+		<property name="checkPermission">
+			<ref bean="checkPermission" />
+		</property>
+	</bean> 
+	
+	<bean id="orgunitService" class="com.velcro.base.orgunit.service.OrgunitService">
+		<property name="orgunitDao">
+			<ref bean="orgunitDao" />
+		</property>
+		<property name="orgunitlinkDao">
+			<ref bean="orgunitlinkDao" />
+		</property>
+		<property name="selectitemService">
+			<ref bean="selectitemService" />
+		</property>
+		<property name="orgunittypeService">
+			<ref bean="orgunittypeService" />
+		</property>
+		<property name="dataService">
+			<ref bean="dataService" />
+		</property>
+	</bean>
+	
+	<bean id="orgunittypeService" class="com.velcro.base.orgunit.service.OrgunittypeService">
+		<property name="orgunittypeDao">
+			<ref bean="orgunittypeDao" />
+		</property>
+	</bean> 
+	
+	<bean id="setitemtypeService" class="com.velcro.base.setitem.service.SetitemtypeService">
+		<property name="setitemtypeDao">
+			<ref bean="setitemtypeDao" />
+		</property>
+	</bean> 
+	
+	<bean id="selectitemtypeService" class="com.velcro.base.selectitem.service.SelectitemtypeService">
+		<property name="selectitemtypeDao">
+			<ref bean="selectitemtypeDao" />
+		</property>
+	</bean>
+	
+	<bean id="selectitemService" class="com.velcro.base.selectitem.service.SelectitemService" init-method="initialize">
+		<property name="selectitemDao">
+			<ref bean="selectitemDao" />
+		</property>
+		<property name="pipeinfoService">
+			<ref bean="pipeinfoService" />
+		</property>
+		<property name="reportdefService">
+			<ref bean="reportdefService" />
+		</property>
+		<property name="setitemService">
+			<ref bean="setitemService" />
+		</property>
+		<property name="selectitemtypeService">
+			<ref bean="selectitemtypeService" />
+		</property>
+	</bean>
+	
+	<bean id="setitemService" class="com.velcro.base.setitem.service.SetitemService">
+		<property name="setitemDao">
+			<ref bean="setitemDao" />
+		</property> 
+	</bean> 	
+
+	<bean id="sysuserService" class="com.velcro.base.security.service.logic.SysuserService">
+		<property name="sysuserDao">
+			<ref bean="sysuserDao" />
+		</property>
+		<property name="acegiCacheManager">
+			<ref bean="acegiCacheManager" />
+		</property>
+		<property name="setitemService">
+			<ref bean="setitemService" />
+		</property>
+		<property name="humresService">
+			<ref bean="humresService" />
+		</property>
+	</bean>	
+	
+	<bean id="logService" class="com.velcro.base.log.service.LogService">
+		<property name="logDao">
+			<ref bean="logDao" />
+		</property>
+		<property name="setitemService">
+			<ref bean="setitemService" />
+		</property>
+		<property name="dataService">
+			<ref bean="dataService" />
+		</property>
+		<property name="sysresourceService">
+			<ref bean="sysresourceService" />
+		</property>
+	</bean>	
+
+	<bean id="scoreService" class="com.velcro.document.score.service.ScoreService">
+		<property name="logDao">
+			<ref bean="logDao" />
+		</property>
+		<property name="selectitemService">
+			<ref bean="selectitemService" />
+		</property>
+	</bean>
+
+	
+	<bean id="syspermsService" class="com.velcro.base.security.service.logic.SyspermsService">
+		<property name="syspermsDao">
+			<ref bean="syspermsDao" />
+		</property>
+	</bean>		
+	
+	<bean id="sysresourceService" class="com.velcro.base.security.service.logic.SysresourceService">
+		<property name="sysresourceDao">
+			<ref bean="sysresourceDao" />
+		</property>
+	</bean>		
+	
+	<bean id="sysroleService" class="com.velcro.base.security.service.logic.SysroleService">
+		<property name="sysroleDao">
+			<ref bean="sysroleDao" />
+		</property>
+	</bean>		
+	
+	<bean id="sysuserrolelinkService" class="com.velcro.base.security.service.logic.SysuserrolelinkService">
+		<property name="sysuserrolelinkDao">
+			<ref bean="sysuserrolelinkDao" />
+		</property>
+		<property name="permissionruleDao">
+			<ref bean="permissionruleDao" />
+		</property>
+		<property name="sysroleChangeService">
+			<ref bean="sysroleChangeService" />
+		</property>
+	</bean>		
+
+	<bean id="permissionruleService" class="com.velcro.base.security.service.logic.PermissionruleService">
+		<property name="permissionruleDao">
+			<ref bean="permissionruleDao" />
+		</property>
+		<property name="dataService">
+			<ref bean="dataService" />
+		</property>
+	</bean>		
+
+	<bean id="permissionrulemodelService" class="com.velcro.base.security.service.logic.PermissionrulemodelService">
+		<property name="permissionrulemodelDao">
+			<ref bean="permissionrulemodelDao" />
+		</property>
+	</bean>	
+	
+	<bean id="permissiondetailService" class="com.velcro.base.security.service.logic.PermissiondetailService">
+		<property name="permissiondetailDao">
+			<ref bean="permissiondetailDao" />
+		</property>
+	</bean>	
+	
+	<bean id="refobjService" class="com.velcro.base.refobj.service.RefobjService">
+		<property name="refobjDao">
+			<ref bean="refobjDao" />
+		</property>
+		<property name="refjdbc">
+			<ref bean="refjdbc" />
+		</property>
+	</bean>	
+	
+	<bean id="refobjlinkService" class="com.velcro.base.refobj.service.RefobjlinkService">
+		<property name="refobjlinkDao">
+			<ref bean="refobjlinkDao" />
+		</property>
+	</bean>
+	
+	<bean id="refobjmodelService" class="com.velcro.base.refobj.service.RefobjmodelService">
+		<property name="refobjmodelDao">
+			<ref bean="refobjmodelDao" />
+		</property>
+		<property name="baseJdbcDao">
+			<ref bean="baseJdbcDao" />
+		</property>
+		<property name="refobjService">
+			<ref bean="refobjService" />
+		</property>
+		<property name="labelService">
+			<ref bean="labelService" />
+		</property>
+	</bean>
+
+    <bean id="refobjmodeltypeService" class="com.velcro.synergy.service.RefobjmodeltypeService">
+		<property name="refobjmodeltypeDao">
+			<ref bean="refobjmodeltypeDao" />
+		</property>
+	</bean>
+	
+	<bean id="udtypeService" class="com.velcro.base.udtype.service.UdtypeService">
+		<property name="udtypeDao">
+			<ref bean="udtypeDao" />
+		</property>
+	</bean>
+	
+	<bean id="favlistService" class="com.velcro.base.favlist.service.FavlistService">
+		<property name="favlistDao">
+			<ref bean="favlistDao" />
+		</property>
+	</bean>
+	
+	
+	<bean id="logFilterService" class="com.velcro.base.log.service.LogFilterService">
+		<property name="sysresourceDao">
+			<ref bean="sysresourceDao" />
+		</property>
+		<property name="acegiCacheManager">
+			<ref bean="acegiCacheManager" />
+		</property>	
+	</bean>
+	
+	<bean id="categoryService" class="com.velcro.base.category.service.CategoryService">
+		<property name="categoryDao">
+			<ref bean="categoryDao" />
+		</property>
+		<property name="categorylinkDao">
+			<ref bean="categorylinkDao" />
+		</property>
+		<property name="permissiondetailService">
+			<ref bean="permissiondetailService" />
+		</property>
+		<property name="checkPermission">
+			<ref bean="checkPermission" />
+		</property>
+		<property name="labelService">
+			<ref bean="labelService" />
+		</property>
+		<property name="dataService">
+			<ref bean="dataService" />
+		</property>
+	</bean>
+		
+	<bean id="refjdbc" class="com.velcro.base.refobj.dao.RefobjDaoJDBC">
+		<property name="dataService">
+			<ref bean="dataService" />
+		</property>
+		<property name="labelService">
+			<ref bean="labelService" />
+		</property>
+	</bean>
+
+	<bean id="dbService" class="com.velcro.base.dbbase.service.DBService">
+		<property name="simpleDao">
+			<ref bean="simpleDao" />
+		</property>
+	</bean>			
+
+	<bean id="databaseToXML" class="com.velcro.base.util.DatabaseToXML">
+			<property name="sessionFactory">
+				<ref bean="sessionFactory" />
+			</property>
+	</bean>	
+
+	<bean id="logDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.log.dao.LogDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>	
+		</property>
+	</bean>	
+	
+	<bean id="labelDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.label.dao.LabelDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="menuDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.menu.dao.MenuDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="pagemenuDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.menu.dao.PagemenuDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="orgunittypeDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.orgunit.dao.OrgunittypeDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="orgunitDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.orgunit.dao.OrgunitDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="orgunitlinkDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.orgunit.dao.OrgunitlinkDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+ 
+	<bean id="searchcustomizeoptionDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.searchcustomize.dao.SearchcustomizeoptionDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+ 
+	<bean id="searchcustomizeDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.searchcustomize.dao.SearchcustomizeDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="setitemtypeDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.setitem.dao.SetitemtypeDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="setitemDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.setitem.dao.SetitemDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="selectitemDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.selectitem.dao.SelectitemDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="selectitemtypeDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.selectitem.dao.SelectitemtypeDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="sysuserDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.security.dao.SysuserDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="sysresourceDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.security.dao.SysresourceDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="syspermsDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.security.dao.SyspermsDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="sysroleDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.security.dao.SysroleDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>	
+		</property>
+	</bean>
+
+	<bean id="sysuserrolelinkDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.security.dao.SysuserrolelinkDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+
+	<bean id="permissionruleDao" parent="txProxyTemplate">
+		<property name="target">
+			<ref bean="permissionruleDaoHB" />
+		</property>
+	</bean>
+	<bean id="permissionruleDaoHB" class="com.velcro.base.security.dao.PermissionruleDaoHB" >
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+		<property name="orgunitService">
+			<ref bean="orgunitService" />
+		</property>
+		<property name="stationinfoService">
+			<ref bean="stationinfoService" />
+		</property>
+		<property name="stationlevellinkService">
+			<ref bean="stationlevellinkService" />
+		</property>
+		<property name="workflowbaseService">
+			<ref bean="workflowbaseService" />
+		</property>		
+	</bean>
+	
+	<bean id="permissionrulemodelDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.security.dao.PermissionrulemodelDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+		
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="permissiondetailDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.security.dao.PermissiondetailDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="refobjDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.refobj.dao.RefobjDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+
+	<bean id="refobjlinkDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.refobj.dao.RefobjlinkDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="refobjmodelDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.refobj.dao.RefobjmodelDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+	
+		<bean id="refobjmodeltypeDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.synergy.dao.RefobjmodeltypeDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="udtypeDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.udtype.dao.UdtypeDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+		
+	<bean id="baseJdbcDao" class="com.velcro.base.BaseJdbcDao">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+	</bean>
+	
+	<bean id="favlistDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.favlist.dao.FavlistDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="categoryDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.category.dao.CategoryDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="categorylinkDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.category.dao.CategorylinkDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>	
+	
+	<bean id="simpleDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.dbbase.dao.SimpleDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>	
+		</property>
+	</bean>	
+	
+	<bean id="menuorgService" class="com.velcro.base.menu.service.MenuorgService">
+		<property name="menuorgDao">
+			<ref bean="menuorgDao" />
+		</property>
+		<property name="menuService">
+			<ref bean="menuService" />
+		</property>
+	</bean>	
+	
+	<bean id="keyinfoService" class="com.velcro.base.keyinfo.service.KeyinfoService">
+		<property name="keyinfoDao">
+			<ref bean="keyinfoDao" />
+		</property>
+		<property name="dataService">
+			<ref bean="dataService"/>
+		</property>
+	</bean>
+	
+	<bean id="stationlevellinkService" class="com.velcro.base.stationlevel.service.StationlevellinkService">
+		<property name="stationlevellinkDao">
+			<ref bean="stationlevellinkDao" />
+		</property>
+	</bean>
+			
+	<bean id="keyinfoDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.keyinfo.dao.KeyinfoDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>	
+		</property>
+	</bean>
+
+	<bean id="menuorgDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.menu.dao.MenuorgDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="stationlevellinkDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.stationlevel.dao.StationlevellinkDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="versioninfoDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.versioninfo.dao.VersioninfoDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="versioninfoService" class="com.velcro.base.versioninfo.service.VersioninfoService">
+		<property name="versioninfoDao">
+			<ref bean="versioninfoDao" />
+		</property>
+	</bean>
+
+	<bean id="userMenuDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.menu.dao.UserMenuDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="userMenuService" class="com.velcro.base.menu.service.UserMenuService">
+		<property name="userMenuDao">
+			<ref bean="userMenuDao" />
+		</property>
+	</bean>	
+	
+	<bean id="menuFacade" class="com.velcro.base.menu.service.MenuFacade">
+		<property name="orgunitService">
+			<ref bean="orgunitService" />
+		</property>
+		<property name="menuService">
+		   <ref bean="menuService"/>
+		</property>
+		<property name="menuorgService">
+		   <ref bean="menuorgService"/>
+		</property>
+		<property name="userMenuService">
+		   <ref bean="userMenuService"/>
+		</property>
+		<property name="dataService">
+		   <ref bean="dataService"/>
+		</property>
+	</bean>
+
+	<bean id="addOrgStationService" class="com.velcro.base.security.service.logic.AddOrgStationService">
+		<property name="dpermissionruleDaoHB">
+			<ref bean="dpermissionruleDaoHB" />
+		</property>
+		<property name="dataService">
+			<ref bean="dataService" />
+		</property>
+		<property name="orgunitService">
+			<ref bean="orgunitService" />
+		</property>
+		<property name="permitProducer">
+			<ref bean="permitProducer" />
+		</property>	
+	</bean>
+	<bean id="dpermissionruleDaoHB" class="com.velcro.base.security.dao.DPermissionruleDaoHB">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+		<property name="orgunitService">
+			<ref bean="orgunitService" />
+		</property>
+		<property name="stationinfoService">
+			<ref bean="stationinfoService" />
+		</property>
+		<property name="stationlevellinkService">
+			<ref bean="stationlevellinkService" />
+		</property>
+		<property name="workflowbaseService">
+			<ref bean="workflowbaseService" />
+		</property>		
+	</bean>
+	
+	<bean id="sysroleChangeService" class="com.velcro.base.security.service.logic.SysroleChangeService">
+		<property name="permissionruleDaoHB">
+			<ref bean="permissionruleDaoHB" />
+		</property>
+		<property name="dataService">
+			<ref bean="dataService" />
+		</property>
+	</bean>		
+
+	<bean id="subjectService" class="com.velcro.base.subject.service.SubjectService" init-method="initialize">
+		<property name="subjectDao">
+			<ref bean="subjectDao" />
+		</property>
+		<property name="dataService">
+			<ref bean="dataService" />
+		</property>
+		<property name="orgunitService">
+			<ref bean="orgunitService" />
+		</property>
+		<property name="orgsubjectlinkService">
+			<ref bean="orgsubjectlinkService" />
+		</property>
+		<property name="setitemService">
+			<ref bean="setitemService" />
+		</property>
+	</bean>		
+	<bean id="rejectSubjectService" class="com.velcro.base.subject.service.RejectSubjectService">
+		<property name="rejectSubjectDao">
+			<ref bean="rejectSubjectDao" />
+		</property>
+		<property name="dataService">
+			<ref bean="dataService" />
+		</property>
+		<property name="subjectService">
+			<ref bean="subjectService" />
+		</property>
+	</bean>
+	<bean id="rejectSubjectDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.subject.dao.RejectSubjectDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="orgsubjectlinkService" class="com.velcro.base.subject.service.OrgsubjectlinkService">
+		<property name="orgsubjectlinkDao">
+			<ref bean="orgsubjectlinkDao" />
+		</property>
+	</bean>
+	<bean id="orgsubjectlinkDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.subject.dao.OrgsubjectlinkDaoHB">
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="subjectDao" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.velcro.base.subject.dao.SubjectDaoHB">
+				<property name="dataService">
+					<ref bean="dataService" />
+				</property>
+				<property name="sessionFactory">
+					<ref bean="sessionFactory" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="attachDao" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="com.velcro.document.base.dao.AttachDaoHB">
+                <property name="sessionFactory">
+                    <ref bean="sessionFactory" />
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+	<!-- 清理文档锁定信息 -->
+	<bean id="docLockInfoJob" class="com.velcro.base.job.DocLockInfoJob">
+		<property name="dataService">
+			<ref bean="dataService" />
+		</property>
+		<property name="setitemService">
+		  <ref bean="setitemService"/>
+		</property>
+	</bean>
+	
+	<!-- 加密解密工具 -->
+	<bean id="cRPTService" class="com.velcro.base.CRPTService">
+		
+	</bean>
+	
+</beans>
