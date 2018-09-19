@@ -15,10 +15,10 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import com.velcro.base.DBSqlUtil;
-import com.velcro.base.JdbcPage;
-import com.velcro.base.Page;
-import com.velcro.base.util.NumberHelper;
+import cc.alpha.base.DBSqlUtil;
+import cc.alpha.base.JdbcPage;
+import cc.alpha.base.Page;
+import cc.alpha.base.utils.NumberHelper;
 
 public class DBHelper {
 	private Connection conn = null;

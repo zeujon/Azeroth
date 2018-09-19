@@ -17,11 +17,8 @@ import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.NotReadablePropertyException;
 
-import com.velcro.base.ServletInterceptor;
-import com.velcro.base.util.DateHelper;
-import com.velcro.base.util.ITransctVoField;
-import com.velcro.base.util.SimpleDateFormatAnnotations;
-import com.velcro.ztgame.bidding.domain.BidForm;
+import cc.alpha.base.ServletInterceptor;
+
 
 public class RmVoHelper {
 

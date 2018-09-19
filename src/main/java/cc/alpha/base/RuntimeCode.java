@@ -1,4 +1,4 @@
-package com.velcro.base;
+package cc.alpha.base;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,8 +12,8 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import cc.alpha.base.utils.StringHelper;
 import com.sun.tools.javac.Main;
-import com.velcro.base.util.StringHelper;
 
 public class RuntimeCode {
 

@@ -1,4 +1,4 @@
-package com.velcro.base.util;
+package cc.alpha.base.utils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

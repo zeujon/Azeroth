@@ -6,7 +6,7 @@
  * @author Rockey 2006-4-10
  * @version 1.0
  */
-package com.velcro.base.util;
+package cc.alpha.base.utils;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;

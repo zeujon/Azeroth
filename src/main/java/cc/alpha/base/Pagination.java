@@ -1,4 +1,4 @@
-package com.velcro.base;
+package cc.alpha.base;
 
 import java.util.List;
 
