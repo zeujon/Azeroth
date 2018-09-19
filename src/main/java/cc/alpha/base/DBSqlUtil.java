@@ -1,4 +1,6 @@
-package com.velcro.base;
+package cc.alpha.base;
+
+import cc.alpha.base.utils.SQLObject;
 
 public class DBSqlUtil {
 	// HSQL数据库直接支持分页语句

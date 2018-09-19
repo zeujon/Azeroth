@@ -1,4 +1,4 @@
-package com.velcro.base.util;
+package cc.alpha.base.utils;
 
 public interface Code extends java.io.Serializable {
 

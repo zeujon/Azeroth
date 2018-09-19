@@ -12,6 +12,8 @@ import com.velcro.base.security.model.Permissiondetail;
 import com.velcro.base.security.model.Permissionrule;
 import com.velcro.workflow.workflow.model.Workflowoperators;
 
+import cc.alpha.base.JdbcPage;
+
 
 public class BaseJdbcDao extends JdbcDaoSupport {
 

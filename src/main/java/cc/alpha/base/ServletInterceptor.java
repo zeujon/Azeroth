@@ -1,4 +1,4 @@
-package com.velcro.base;
+package cc.alpha.base;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 

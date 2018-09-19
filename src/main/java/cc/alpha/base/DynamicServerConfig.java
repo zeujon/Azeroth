@@ -1,4 +1,4 @@
-package com.velcro.base;
+package cc.alpha.base;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +11,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.util.DefaultPropertiesPersister;
 import org.springframework.util.PropertiesPersister;
 
-import com.velcro.base.util.PropertiesUtil;
+import cc.alpha.base.utils.PropertiesUtil;
+
 
 public class DynamicServerConfig extends PropertyPlaceholderConfigurer {
 

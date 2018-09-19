@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
-import org.bouncycastle.util.encoders.Base64;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -39,9 +38,9 @@ public abstract class SupTest {
 		// 加密报文体格式：BASE64(商户号)| BASE64(RSA(报文加密密钥))| BASE64(3DES(报文原文))
 		String strKey = RSACoder.encryptByPublicKey(new String(mkey.getBytes(), "utf-8"), publicKey);
 
-		String strxml = new String(Base64.encode(DesUtil.encrypt(xml.toString().getBytes("utf-8"), mkey.getBytes())));
+		String strxml = new String(Base64Coder.encode(DesUtil.encrypt(xml.toString().getBytes("utf-8"), mkey.getBytes())));
 
-		String returnXml = new String(Base64.encode(channelId.getBytes("utf-8"))) + "|" + strKey + "|" + strxml;
+		String returnXml = new String(Base64Coder.encode(channelId.getBytes("utf-8"))) + "|" + strKey + "|" + strxml;
 		System.out.println(returnXml);
 		System.out.println();
 		System.out.println();
@@ -53,13 +52,13 @@ public abstract class SupTest {
 		String xmlArr[] = reutrnResult.split("\\|");
 
 		if (xmlArr[0].equals("0")) {
-			System.out.println(new String(Base64.decode(xmlArr[2]), "utf-8"));
+			System.out.println(new String(Base64Coder.decode(xmlArr[2]), "utf-8"));
 		} else {
-			byte[] b = DesUtil.decrypt(Base64.decode(xmlArr[1]), mkey.getBytes());
+			byte[] b = DesUtil.decrypt(Base64Coder.decode(xmlArr[1]), mkey.getBytes());
 
 			String tradeXml = new String(b, "utf-8");
 			System.out.println(tradeXml);
-			System.out.println(new String(Base64.encode(Md5Utils.md5ToHexStr(tradeXml).getBytes("utf-8"))));// BASE64(MD5(报文))
+			System.out.println(new String(Base64Coder.encode(Md5Utils.md5ToHexStr(tradeXml).getBytes("utf-8"))));// BASE64(MD5(报文))
 			return tradeXml;
 		}
 		return null;

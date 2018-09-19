@@ -1,7 +1,7 @@
-package com.velcro.base;
+package cc.alpha.base;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 分页对象.
@@ -12,6 +12,8 @@ import org.apache.commons.logging.LogFactory;
  * @author ajax
  */
 public class Page implements java.io.Serializable {
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	
     public static final int DEFAULT_PAGE_SIZE = 20;
     public static final int MAX_PAGE_SIZE = 100;
 

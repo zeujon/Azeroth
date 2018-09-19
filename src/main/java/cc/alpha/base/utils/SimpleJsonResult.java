@@ -1,4 +1,4 @@
-package com.velcro.base.util;
+package cc.alpha.base.utils;
 
 import java.util.HashMap;
 import java.util.Map;

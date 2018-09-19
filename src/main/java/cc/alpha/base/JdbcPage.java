@@ -1,4 +1,4 @@
-package com.velcro.base;
+package cc.alpha.base;
 
 import java.util.List;
 
@@ -7,7 +7,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.velcro.base.util.StringHelper;
+import cc.alpha.base.utils.SQLObject;
+import cc.alpha.base.utils.StringHelper;
+
 
 public class JdbcPage extends Page {
 	
@@ -105,7 +107,7 @@ public class JdbcPage extends Page {
     		sql = "select count("+ selected +") as totalnum " + lower;
     	}
     	logger.info("jdbcPage.sql:" +  sql);
-    	int allcount = jdbcTemplate.queryForInt(sql); 
+    	int allcount = jdbcTemplate.queryForObject(sql, Integer.class); 
     	return allcount;
  
     }
@@ -113,7 +115,7 @@ public class JdbcPage extends Page {
     private static int calculateTotalElementsByList(JdbcTemplate jdbcTemplate,String sql) {
     	StringBuffer pagesql = new StringBuffer();
 		pagesql.append("select count(*) from (").append(sql.replaceAll("\\sorder\\s.*", "")).append(") T ");
-		int allcount = jdbcTemplate.queryForInt(pagesql.toString());
+		int allcount = jdbcTemplate.queryForObject(pagesql.toString(), Integer.class);
 		return allcount;
     }
 
@@ -137,7 +139,7 @@ public class JdbcPage extends Page {
 
 		StringBuffer sql = new StringBuffer();
 		sql.append("select count(").append(pk).append(") as totalnum from ").append(tables).append(" where ").append(wherestr);
-    	int allcount = jdbcTemplate.queryForInt(sql.toString()); 
+    	int allcount = jdbcTemplate.queryForObject(sql.toString(), Integer.class); 
     	return allcount;
  
     }
